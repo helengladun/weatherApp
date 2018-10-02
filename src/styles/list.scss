@@ -1,0 +1,41 @@
+.list {
+  background: #2E4172;
+  display: flex;
+  flex-direction: column;
+  &__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;;
+    align-content: center;
+    text-transform: capitalize;
+    &--lowest {
+      background: #496D89;
+    }
+    &--highest {
+      background: #D46A6A;
+    }
+  }
+  &__header {
+    & th {
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+  }
+  td {
+    color: white;
+  }
+  .wish-icon {
+    color: white;
+    &--green {
+      color: #83F400;
+    }
+  }
+  .visited-icon {
+    transition: .5s;
+    color: white;
+    &--orange {
+      color: #FF9000;
+      transition: .5s;
+    }
+  }
+}
