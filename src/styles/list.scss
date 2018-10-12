@@ -14,6 +14,12 @@
     &--highest {
       background: #D46A6A;
     }
+    &--visited {
+      background: #C0B2A4;
+    }
+    &--wanted {
+      background: #88709c;
+    }
   }
   &__header {
     & th {
@@ -38,4 +44,18 @@
       transition: .5s;
     }
   }
+  .filter-icon {
+    transition: .5s;
+    color: white;
+    position: relative;
+    top: 7px;
+    left: 5px;
+    &--fired {
+      color: #981515;
+      transition: .5s;
+    }
+  }
+}
+.list.fade-in {
+  opacity: 1;
 }
