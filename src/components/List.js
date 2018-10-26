@@ -36,7 +36,7 @@ class MainpageList extends Component {
                 <FilterList onClick={() => sortBy(data)} className={`filter-icon ${sortName === 'temp'? 'filter-icon--fired' : ''}`}/>
               </TableCell>
               <TableCell>Sort to default
-                <FilterList onClick={() => sortBy(data)} className={`filter-icon ${sortName === 'temp'? 'filter-icon--fired' : ''}`}/>
+                <FilterList onClick={() => sortBy(data, 'default')} className={`filter-icon ${sortName === 'default'? 'filter-icon--fired' : ''}`}/>
               </TableCell>
             </TableRow>
           </TableHead>
