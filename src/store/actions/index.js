@@ -1,0 +1,5 @@
+// 'WANT_TO_VISIT'
+// 'VISITED'
+// 'ADD CITY'
+// 'REMOVE CITY'
+// 'GO TO DEFAULT'
