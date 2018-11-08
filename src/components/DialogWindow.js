@@ -11,12 +11,12 @@ class FormDialog extends Component {
     super(props);
 
     this.state = {
-      cityName: ''
+      cityName: '',
     };
   }
 
-  changeText = (e) => {
-    this.setState({cityName: e.target.value});
+  changeText = e => {
+    this.setState({ cityName: e.target.value });
   };
 
   render() {
@@ -24,33 +24,29 @@ class FormDialog extends Component {
     const { cityName } = this.state;
 
     return (
-        <div>
-          <Dialog
-              open={isDialogOpened}
-              onClose={handleClose}
-              aria-labelledby="form-dialog-title"
-          >
-            <DialogTitle id="form-dialog-title">Add city</DialogTitle>
-            <DialogContent>
-              <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  type="text"
-                  fullWidth
-                  onChange={this.changeText}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={() => handleAdd(cityName)} color="primary">
-                Add
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+      <div>
+        <Dialog open={isDialogOpened} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Add city</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              type="text"
+              fullWidth
+              onChange={this.changeText}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => handleAdd(cityName)} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   }
 }

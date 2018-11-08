@@ -1,12 +1,12 @@
 import React from 'react';
 import MainpageButton from './Button';
 
-const MainpageButtonGroup = ({handleOpenDialog, handleReset}) => {
+const MainpageButtonGroup = ({ handleOpenDialog, handleReset }) => {
   return (
-      <div>
-        <MainpageButton action={handleOpenDialog}>Add</MainpageButton>
-        <MainpageButton action={handleReset}>Go to default</MainpageButton>
-      </div>
+    <div>
+      <MainpageButton action={handleOpenDialog}>Add</MainpageButton>
+      <MainpageButton action={handleReset}>Go to default</MainpageButton>
+    </div>
   );
 };
 

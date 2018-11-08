@@ -9,10 +9,10 @@ import Item from './ListItem';
 
 class MainpageList extends Component {
   render() {
-    const {isLoading, data, toggleAction, removeItem, sortBy, sortName} = this.props;
+    const { isLoading, data, toggleAction, removeItem, sortBy, sortName } = this.props;
 
     if (isLoading) {
-      return <div>Loading...</div>
+      return <div>Loading...</div>;
     }
 
     if (data.length === 0) {
@@ -20,30 +20,52 @@ class MainpageList extends Component {
     }
 
     return (
-        <Table className="list">
-          <TableHead className="list__header">
-            <TableRow>
-              <TableCell>Want to visit
-                <FilterList onClick={() => sortBy(data, 'isWanted')} className={`filter-icon ${sortName === 'isWanted'? 'filter-icon--fired' : ''}`}/>
-              </TableCell>
-              <TableCell>Visited
-                <FilterList onClick={() => sortBy(data, 'isVisited')} className={`filter-icon ${sortName === 'isVisited'? 'filter-icon--fired' : ''}`}/>
-              </TableCell>
-              <TableCell>Capital
-                <FilterList onClick={() => sortBy(data, 'capital')} className={`filter-icon ${sortName === 'capital'? 'filter-icon--fired' : ''}`}/>
-              </TableCell>
-              <TableCell>Temperature, C
-                <FilterList onClick={() => sortBy(data)} className={`filter-icon ${sortName === 'temp'? 'filter-icon--fired' : ''}`}/>
-              </TableCell>
-              <TableCell>Sort to default
-                <FilterList onClick={() => sortBy(data, 'default')} className={`filter-icon ${sortName === 'default'? 'filter-icon--fired' : ''}`}/>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.length && data.map((item, i) => {
+      <Table className="list">
+        <TableHead className="list__header">
+          <TableRow>
+            <TableCell>
+              Want to visit
+              <FilterList
+                onClick={() => sortBy(data, 'isWanted')}
+                className={`filter-icon ${sortName === 'isWanted' ? 'filter-icon--fired' : ''}`}
+              />
+            </TableCell>
+            <TableCell>
+              Visited
+              <FilterList
+                onClick={() => sortBy(data, 'isVisited')}
+                className={`filter-icon ${sortName === 'isVisited' ? 'filter-icon--fired' : ''}`}
+              />
+            </TableCell>
+            <TableCell>
+              Capital
+              <FilterList
+                onClick={() => sortBy(data, 'capital')}
+                className={`filter-icon ${sortName === 'capital' ? 'filter-icon--fired' : ''}`}
+              />
+            </TableCell>
+            <TableCell>
+              Temperature, C
+              <FilterList
+                onClick={() => sortBy(data)}
+                className={`filter-icon ${sortName === 'temp' ? 'filter-icon--fired' : ''}`}
+              />
+            </TableCell>
+            <TableCell>
+              Sort to default
+              <FilterList
+                onClick={() => sortBy(data, 'default')}
+                className={`filter-icon ${sortName === 'default' ? 'filter-icon--fired' : ''}`}
+              />
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.length &&
+            data.map((item, i) => {
               return (
-                <Item key={i}
+                <Item
+                  key={i}
                   capital={item.capital}
                   weather={item.temp}
                   isTheLowest={item.isTheLowest}
@@ -52,10 +74,11 @@ class MainpageList extends Component {
                   isVisited={item.isVisited}
                   isWantedToVisit={item.isWanted}
                   removeItem={removeItem}
-                />);
+                />
+              );
             })}
-          </TableBody>
-        </Table>
+        </TableBody>
+      </Table>
     );
   }
 }
