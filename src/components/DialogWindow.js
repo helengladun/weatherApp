@@ -20,6 +20,7 @@ class FormDialog extends Component {
   };
 
   render() {
+    console.log(this.props);
     const { isDialogOpened, handleClose, handleAdd } = this.props;
     const { cityName } = this.state;
 

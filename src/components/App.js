@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'typeface-roboto';
-import './App.css';
-import Main from './containers/Main';
+import '../styles/App.css';
+import Main from '../containers/Main';
 
 class App extends Component {
   render() {

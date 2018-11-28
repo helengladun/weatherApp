@@ -1,41 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import axios from 'axios';
 import capitals from '../utils/capitals';
 import MainpageList from '../components/List';
 import MainpageButtonGroup from '../components/ButtonGroup';
 import FormDialog from '../components/DialogWindow';
+import * as weatherActions from '../store/actions';
 import * as R from 'ramda';
 import '../styles/list.css';
-
-const DIRECTION = {
-  temp: R.ascend,
-  isWanted: R.descend,
-  isVisited: R.descend,
-  capital: R.ascend,
-  default: R.ascend,
-};
+//
+// const DIRECTION = {
+//   temp: R.ascend,
+//   isWanted: R.descend,
+//   isVisited: R.descend,
+//   capital: R.ascend,
+//   default: R.ascend,
+// };
 
 class Mainpage extends Component {
   API_KEY = 'f816a9bfdb5f7fdf90b24a686288b114';
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: [],
-      isLoading: true,
-      isDialogOpened: false,
-      sort: {
-        name: 'temp',
-        isOrderByDesc: false,
-      },
-    };
-  }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return !R.equals(nextState.data, this.state.data);
-  // }
 
   componentDidMount() {
     let userCitiesFromStorage = this.getDataFromLocalStorage('cities');
@@ -45,9 +29,8 @@ class Mainpage extends Component {
 
   getFullInfo(capitalsArr) {
     let resultArr = [];
-    this.setState({
-      isLoading: true,
-    });
+    this.props.weatherActions.startFetching();
+
     capitalsArr.length !== 0 &&
       capitalsArr.map(item => {
         let capital = item.capital ? item.capital : item;
@@ -83,10 +66,7 @@ class Mainpage extends Component {
           R.head(resultArr).isTheLowest = true;
           R.last(resultArr).isTheHighest = true;
 
-          this.setState({
-            data: resultArr,
-            isLoading: false,
-          });
+          this.props.weatherActions.endFetchingSuccess(resultArr);
 
           localStorage.setItem('cities', JSON.stringify(resultArr));
         })
@@ -99,11 +79,23 @@ class Mainpage extends Component {
         });
   }
   sortAscByProp(obj, prop) {
-    return obj.sort((a, b) => a[prop] > b[prop]);
+    return obj.sort((a, b) => {
+      if (a[prop] < b[prop]) {
+        return -1;
+      } else if (a[prop] >= b[prop]) {
+        return 1;
+      }
+    });
   }
 
   sortDescByProp(obj, prop) {
-    return obj.sort((a, b) => a[prop] < b[prop]);
+    return obj.sort((a, b) => {
+      if (a[prop] > b[prop]) {
+        return -1;
+      } else if (a[prop] <= b[prop]) {
+        return 1;
+      }
+    });
   }
 
   setPropToObject(obj, prop, value) {
@@ -114,7 +106,7 @@ class Mainpage extends Component {
   }
 
   toggleAction = (city, prop) => {
-    const { data } = this.state;
+    const { data } = this.props;
     let newArr = data.map(item => {
       //item[prop] - returns false because of item.isWanted = false
       if (item.capital === city && item.hasOwnProperty(prop)) {
@@ -124,16 +116,14 @@ class Mainpage extends Component {
       return item;
     });
 
-    this.setState({
-      data: newArr,
-    });
+    this.props.weatherActions.toggleAction(newArr);
 
     localStorage.setItem('cities', JSON.stringify(newArr));
   };
 
   handleAdd = cityName => {
     const newCity = cityName.toLowerCase();
-    let currentData = this.state.data;
+    let currentData = this.props.data;
     let listOfCapitals = currentData.map(item => item.capital);
 
     if (!newCity) {
@@ -146,7 +136,7 @@ class Mainpage extends Component {
       return;
     }
 
-    this.setState({ isDialogOpened: false });
+    this.handleCloseDialog();
     let link = this.getFullLink(newCity);
     let weatherPromise = axios.get(link);
     weatherPromise
@@ -164,9 +154,9 @@ class Mainpage extends Component {
         this.setNewObjToStorage(newItem);
         currentData.push(newItem);
         const newData = this.setArrToDefault(currentData);
-        this.setState({
-          data: newData,
-        });
+
+        this.props.weatherActions.addCapital(newData);
+
       })
       .catch(error => {
         if (error.response.status === 404) {
@@ -206,41 +196,37 @@ class Mainpage extends Component {
   }
 
   handleOpenDialog = () => {
-    this.setState({ isDialogOpened: true });
+    console.log(this.props);
+    this.props.weatherActions.openDialogWindow();
+    console.log(this.props);
   };
 
   handleCloseDialog = () => {
-    this.setState({ isDialogOpened: false });
+    this.props.weatherActions.closeDialogWindow();
   };
 
   //@todo to refactor
   removeItem = capital => {
-    const { data } = this.state;
+    const { data } = this.props;
     let newData = data.filter(item => item.capital !== capital);
 
     //sort and set the lowest and the highest temperature
     if (newData.length > 0) {
       this.setPropToObject(R.head(newData), 'isTheLowest', true);
       this.setPropToObject(R.last(newData), 'isTheHighest', true);
-
       localStorage.removeItem('cities');
       localStorage.setItem('cities', JSON.stringify(newData));
-
-      this.setState({
-        data: newData,
-      });
+      this.props.weatherActions.removeCapital(newData);
     } else {
       localStorage.removeItem('cities');
-      this.setState({
-        data: [],
-      });
+      this.props.weatherActions.removeItem([]);
     }
   };
 
   //@todo to refactor
   handleChange = e => {
     let filter = e.target.value;
-    let data = this.state.data;
+    let data = this.props.data;
     let newArr = data.filter(item => item.capital.indexOf(filter) !== -1);
 
     if (newArr.length) {
@@ -253,24 +239,20 @@ class Mainpage extends Component {
       this.setPropToObject(R.head(newArr), 'isTheLowest', true);
       this.setPropToObject(R.last(newArr), 'isTheHighest', true);
     }
-    this.setState({
-      data: newArr,
-    });
+    this.props.weatherActions.filteredData(newArr);
   };
 
   sortBy = (arr, param = 'temp') => {
-    const { sort } = this.state;
+    const { sort } = this.props;
     const isDescOrder = param === 'default' ? false : !sort.isOrderByDesc;
     const paramName = param === 'default' ? 'temp' : param;
     const newArr = isDescOrder
       ? this.sortDescByProp(arr, paramName)
       : this.sortAscByProp(arr, paramName);
-    this.setState({
-      data: newArr,
-      sort: {
-        name: param,
-        isOrderByDesc: isDescOrder,
-      },
+
+    this.props.weatherActions.sortData(newArr, {
+      name: param,
+      isOrderByDesc: isDescOrder,
     });
     return arr;
   };
@@ -291,7 +273,8 @@ class Mainpage extends Component {
   };
 
   render() {
-    const { data, isLoading, isDialogOpened, sort } = this.state;
+    console.log(this.props);
+    const { data, isLoading, isDialogOpened, sort } = this.props;
     return (
       <div>
         <input type="text" onChange={e => this.handleChange(e)} />
@@ -318,12 +301,19 @@ class Mainpage extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   user: state.user,
-//   search: state.search,
-//   sortBy: state.sort
-// });
+function mapStateToProps(state) {
+  return {
+    data: state.data,
+    isLoading: state.isLoading,
+    isDialogOpened: state.isDialogOpened,
+    sort: state.sort
+  }
+}
 
-// export default connect(mapStateToProps)(Mainpage);
+function mapDispatchToProps(dispatch) {
+  return {
+    weatherActions: bindActionCreators(weatherActions, dispatch)
+  }
+}
 
-export default Mainpage;
+export default connect(mapStateToProps, mapDispatchToProps)(Mainpage);

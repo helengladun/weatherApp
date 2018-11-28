@@ -1,11 +1,7 @@
-import { createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools';
-
+import { createStore, applyMiddleware, compose } from 'redux';
 import reducer from './reducers';
 
-// const store = createStore(reducer, undefined, composeWithDevTools());
-const store = createStore(reducer, undefined);
-
-// persistStore(store, { whitelist: ['user']});
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducer, undefined, composeEnhancers(applyMiddleware()));
 
 export default store;

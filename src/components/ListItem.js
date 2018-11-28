@@ -4,16 +4,6 @@ import Star from '@material-ui/icons/Star';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 
-// const yell = (Component) => {
-//   return (
-//       ({children, ...props}) => {
-//         return  <Component {...props}>{children}</Component>
-//       }
-//   )
-// };
-// const Title = (props) => <h1>{props.children}</h1>;
-// const AngryTitle = yell(Title);
-
 const MainpageListItem = ({
   capital,
   weather,
@@ -22,7 +12,7 @@ const MainpageListItem = ({
   isVisited,
   isWantedToVisit,
   toggleAction,
-  removeItem,
+  removeItem
 }) => {
   return (
     <TableRow

@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import FilterList from '@material-ui/icons/FilterList';
+import { FilterList } from '@material-ui/icons';
 import Item from './ListItem';
 
 class MainpageList extends Component {
