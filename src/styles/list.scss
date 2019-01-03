@@ -1,0 +1,61 @@
+.list {
+  background: #2E4172;
+  display: flex;
+  flex-direction: column;
+  &__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;;
+    align-content: center;
+    text-transform: capitalize;
+    &--lowest {
+      background: #496D89;
+    }
+    &--highest {
+      background: #D46A6A;
+    }
+    &--visited {
+      background: #C0B2A4;
+    }
+    &--wanted {
+      background: #88709c;
+    }
+  }
+  &__header {
+    & th {
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+  }
+  td {
+    color: white;
+  }
+  .wish-icon {
+    color: white;
+    &--green {
+      color: #83F400;
+    }
+  }
+  .visited-icon {
+    transition: .5s;
+    color: white;
+    &--orange {
+      color: #FF9000;
+      transition: .5s;
+    }
+  }
+  .filter-icon {
+    transition: .5s;
+    color: white;
+    position: relative;
+    top: 7px;
+    left: 5px;
+    &--fired {
+      color: #981515;
+      transition: .5s;
+    }
+  }
+}
+.list.fade-in {
+  opacity: 1;
+}
